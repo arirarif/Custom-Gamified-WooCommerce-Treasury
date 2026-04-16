@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prizino Treasury — Technical Roadmap & Project Plan</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-alt: #1a1a26;
+  --accent: #6c5ce7;
+  --accent-glow: rgba(108, 92, 231, 0.3);
+  --gold: #f0c040;
+  --gold-glow: rgba(240, 192, 64, 0.2);
+  --teal: #00cec9;
+  --teal-glow: rgba(0, 206, 201, 0.15);
+  --green: #00b894;
+  --red: #ff6b6b;
+  --orange: #fdcb6e;
+  --text: #e8e8f0;
+  --text-dim: #8888a0;
+  --text-muted: #555570;
+  --border: rgba(255,255,255,0.06);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 48px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; color: var(--gold); letter-spacing: -0.5px; }
+.nav-logo span { color: var(--text-dim); font-weight: 400; font-size: 14px; margin-left: 12px; }
+.nav-links { display: flex; gap: 8px; }
+.nav-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 13px; font-weight: 500;
+  padding: 8px 16px; border-radius: 8px; transition: all .2s;
+}
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-links a.active { color: var(--gold); background: var(--gold-glow); }
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 120px 48px 80px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(108,92,231,0.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 100%, rgba(240,192,64,0.06) 0%, transparent 50%);
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  padding: 8px 20px; border-radius: 100px; font-size: 13px; color: var(--text-dim); margin-bottom: 32px;
+}
+.hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(36px, 5vw, 64px); font-weight: 700;
+  line-height: 1.1; margin-bottom: 24px; letter-spacing: -2px;
+}
+.hero h1 .gold { color: var(--gold); }
+.hero h1 .accent { color: var(--accent); }
+.hero p { font-size: 18px; color: var(--text-dim); max-width: 640px; margin-bottom: 48px; }
+.hero-stats { display: flex; gap: 48px; }
+.hero-stat { text-align: center; }
+.hero-stat .num { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; color: var(--gold); }
+.hero-stat .label { font-size: 13px; color: var(--text-dim); margin-top: 4px; }
+
+/* ─── SECTION ─── */
+.section {
+  max-width: 1200px; margin: 0 auto; padding: 80px 48px;
+}
+.section-header { margin-bottom: 48px; }
+.section-label {
+  font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--accent); margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 3vw, 40px); font-weight: 700;
+  letter-spacing: -1px; margin-bottom: 12px;
+}
+.section-desc { font-size: 16px; color: var(--text-dim); max-width: 600px; }
+
+/* ─── OVERVIEW CARDS ─── */
+.overview-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+}
+.ov-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 32px; transition: all .3s; position: relative; overflow: hidden;
+}
+.ov-card:hover { border-color: rgba(108,92,231,0.3); transform: translateY(-4px); }
+.ov-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--gold)); opacity: 0; transition: opacity .3s;
+}
+.ov-card:hover::before { opacity: 1; }
+.ov-icon { font-size: 32px; margin-bottom: 16px; display: block; }
+.ov-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.ov-card p { font-size: 14px; color: var(--text-dim); line-height: 1.7; }
+.ov-card .tag {
+  display: inline-block; margin-top: 16px; padding: 4px 12px; border-radius: 100px;
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+}
+.tag-core { background: rgba(108,92,231,0.15); color: var(--accent); }
+.tag-plugin { background: rgba(0,206,201,0.15); color: var(--teal); }
+.tag-custom { background: var(--gold-glow); color: var(--gold); }
+
+/* ─── ARCHITECTURE ─── */
+.arch-diagram {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 48px; margin-top: 32px; overflow-x: auto;
+}
+.arch-layers { display: flex; flex-direction: column; gap: 24px; min-width: 700px; }
+.arch-layer {
+  display: flex; align-items: center; gap: 16px;
+}
+.arch-layer-label {
+  min-width: 140px; font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; color: var(--text-muted); text-align: right; flex-shrink: 0;
+}
+.arch-boxes { display: flex; gap: 12px; flex-wrap: wrap; flex: 1; }
+.arch-box {
+  padding: 12px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  border: 1px solid; white-space: nowrap;
+}
+.arch-box.purple { background: rgba(108,92,231,0.1); border-color: rgba(108,92,231,0.25); color: #a29bfe; }
+.arch-box.gold { background: var(--gold-glow); border-color: rgba(240,192,64,0.25); color: var(--gold); }
+.arch-box.teal { background: var(--teal-glow); border-color: rgba(0,206,201,0.25); color: var(--teal); }
+.arch-box.green { background: rgba(0,184,148,0.1); border-color: rgba(0,184,148,0.25); color: var(--green); }
+.arch-box.red { background: rgba(255,107,107,0.1); border-color: rgba(255,107,107,0.25); color: var(--red); }
+.arch-arrow {
+  text-align: center; color: var(--text-muted); font-size: 20px; padding: 4px 0;
+}
+
+/* ─── PHASES / TIMELINE ─── */
+.timeline { position: relative; margin-top: 32px; }
+.timeline::before {
+  content: ''; position: absolute; left: 24px; top: 0; bottom: 0; width: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--gold), var(--teal), var(--green));
+  border-radius: 2px;
+}
+.phase {
+  position: relative; margin-bottom: 48px; padding-left: 72px;
+}
+.phase-dot {
+  position: absolute; left: 14px; top: 8px; width: 22px; height: 22px; border-radius: 50%;
+  border: 3px solid; display: flex; align-items: center; justify-content: center;
+}
+.phase-dot::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+}
+.phase.p1 .phase-dot { border-color: var(--accent); }
+.phase.p1 .phase-dot::after { background: var(--accent); }
+.phase.p2 .phase-dot { border-color: var(--gold); }
+.phase.p2 .phase-dot::after { background: var(--gold); }
+.phase.p3 .phase-dot { border-color: var(--teal); }
+.phase.p3 .phase-dot::after { background: var(--teal); }
+.phase.p4 .phase-dot { border-color: var(--green); }
+.phase.p4 .phase-dot::after { background: var(--green); }
+
+.phase-header { display: flex; align-items: baseline; gap: 16px; margin-bottom: 12px; }
+.phase-num {
+  font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700;
+  padding: 4px 12px; border-radius: 100px; text-transform: uppercase; letter-spacing: 1px;
+}
+.p1 .phase-num { background: rgba(108,92,231,0.15); color: var(--accent); }
+.p2 .phase-num { background: var(--gold-glow); color: var(--gold); }
+.p3 .phase-num { background: var(--teal-glow); color: var(--teal); }
+.p4 .phase-num { background: rgba(0,184,148,0.15); color: var(--green); }
+
+.phase-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; }
+.phase-duration { font-size: 13px; color: var(--text-dim); margin-bottom: 16px; }
+.phase-tasks { display: flex; flex-direction: column; gap: 10px; }
+.phase-task {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px 20px; transition: all .2s;
+}
+.phase-task:hover { border-color: rgba(255,255,255,0.1); }
+.task-check {
+  width: 20px; height: 20px; border-radius: 6px; border: 2px solid var(--text-muted);
+  flex-shrink: 0; margin-top: 2px;
+}
+.task-content { flex: 1; }
+.task-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+.task-desc { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.task-tags { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.task-tag {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 3px 8px; border-radius: 4px;
+}
+.tt-php { background: rgba(108,92,231,0.12); color: #a29bfe; }
+.tt-js { background: rgba(240,192,64,0.12); color: var(--gold); }
+.tt-css { background: rgba(0,206,201,0.12); color: var(--teal); }
+.tt-woo { background: rgba(0,184,148,0.12); color: var(--green); }
+.tt-plugin { background: rgba(255,107,107,0.12); color: var(--red); }
+.tt-api { background: rgba(162,155,254,0.12); color: #a29bfe; }
+
+/* ─── PLUGIN MATRIX ─── */
+.plugin-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px;
+  margin-top: 32px;
+}
+.plugin-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 24px; display: flex; gap: 16px; transition: all .3s;
+}
+.plugin-card:hover { border-color: rgba(255,255,255,0.12); }
+.plugin-icon {
+  width: 44px; height: 44px; border-radius: 12px; display: flex;
+  align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0;
+}
+.pi-woo { background: rgba(150,88,217,0.15); }
+.pi-mycred { background: rgba(240,192,64,0.15); }
+.pi-market { background: rgba(0,206,201,0.15); }
+.pi-checkout { background: rgba(0,184,148,0.15); }
+.pi-slice { background: rgba(255,107,107,0.15); }
+.pi-sassy { background: rgba(108,92,231,0.15); }
+.pi-video { background: rgba(255,165,0,0.15); }
+.pi-custom { background: rgba(240,192,64,0.2); }
+.plugin-info h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.plugin-info p { font-size: 13px; color: var(--text-dim); line-height: 1.6; }
+.plugin-info .pill {
+  display: inline-block; margin-top: 8px; padding: 3px 10px; border-radius: 100px;
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+}
+.pill-free { background: rgba(0,184,148,0.15); color: var(--green); }
+.pill-premium { background: var(--gold-glow); color: var(--gold); }
+.pill-custom { background: rgba(255,107,107,0.15); color: var(--red); }
+
+/* ─── DELIVERABLES TABLE ─── */
+.del-table {
+  width: 100%; border-collapse: collapse; margin-top: 32px;
+  background: var(--bg-card); border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--border);
+}
+.del-table thead th {
+  text-align: left; padding: 16px 24px; font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim);
+  border-bottom: 1px solid var(--border); background: var(--bg-card-alt);
+}
+.del-table tbody td {
+  padding: 16px 24px; font-size: 14px; border-bottom: 1px solid var(--border);
+}
+.del-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+  border-radius: 100px; font-size: 11px; font-weight: 600;
+}
+.sb-included { background: rgba(0,184,148,0.12); color: var(--green); }
+.sb-custom { background: var(--gold-glow); color: var(--gold); }
+
+/* ─── PRICING SECTION ─── */
+.pricing-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; margin-top: 32px; }
+.price-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 40px 32px; position: relative; overflow: hidden; transition: all .3s;
+}
+.price-card.featured {
+  border-color: rgba(108,92,231,0.4);
+  background: linear-gradient(135deg, rgba(108,92,231,0.08), var(--bg-card));
+}
+.price-card.featured::before {
+  content: 'RECOMMENDED'; position: absolute; top: 16px; right: -32px;
+  background: var(--accent); color: #fff; font-size: 10px; font-weight: 700;
+  padding: 4px 40px; transform: rotate(45deg); letter-spacing: 1px;
+}
+.price-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600; margin-bottom: 8px; }
+.price-card .price { font-family: 'Space Grotesk', sans-serif; font-size: 48px; font-weight: 700; margin: 16px 0; }
+.price-card .price span { font-size: 18px; color: var(--text-dim); font-weight: 400; }
+.price-card .price-desc { font-size: 14px; color: var(--text-dim); margin-bottom: 24px; }
+.price-features { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.price-features li {
+  font-size: 14px; display: flex; align-items: center; gap: 10px;
+}
+.price-features li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 14px; }
+.price-features li.not::before { content: '—'; color: var(--text-muted); }
+
+/* ─── OFFER / CTA ─── */
+.cta-section {
+  text-align: center; padding: 80px 48px;
+  background: linear-gradient(180deg, transparent, rgba(108,92,231,0.05), transparent);
+}
+.cta-section h2 {
+  font-family: 'Space Grotesk', sans-serif; font-size: clamp(28px, 3vw, 40px);
+  font-weight: 700; margin-bottom: 16px; letter-spacing: -1px;
+}
+.cta-section p { font-size: 16px; color: var(--text-dim); max-width: 500px; margin: 0 auto 32px; }
+.cta-offers { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-bottom: 48px; }
+.cta-pill {
+  display: flex; align-items: center; gap: 8px; padding: 12px 24px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px;
+  font-size: 14px; font-weight: 500;
+}
+.cta-pill .check { color: var(--green); font-weight: 700; }
+
+/* ─── FOOTER ─── */
+.footer {
+  text-align: center; padding: 48px; border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--text-muted);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .nav { padding: 12px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 100px 24px 60px; }
+  .hero-stats { flex-direction: column; gap: 24px; }
+  .section { padding: 48px 24px; }
+  .timeline::before { left: 16px; }
+  .phase { padding-left: 56px; }
+  .phase-dot { left: 6px; }
+  .arch-diagram { padding: 24px; }
+}
+
+/* ─── SCROLL REVEAL ─── */
+.reveal {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ─── SWITCH BAR ─── */
+.switch-bar {
+  position: fixed; top: 56px; left: 0; right: 0; z-index: 190;
+  background: rgba(108,92,231,0.06); backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(108,92,231,0.12);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px 24px; font-size: 13px;
+}
+.switch-bar span { color: var(--text-muted); }
+.switch-bar a {
+  color: var(--accent); text-decoration: none; font-weight: 600;
+  padding: 4px 14px; border-radius: 100px; transition: all .2s;
+  border: 1px solid rgba(108,92,231,0.2);
+}
+.switch-bar a:hover { background: var(--accent-glow); }
+@media (max-width: 768px) {
+  .switch-bar { font-size: 11px; padding: 6px 12px; }
+}
+</style>
+</head>
+<body>
+
+<!-- SWITCH BAR -->
+<div class="switch-bar">
+  <span>Viewing:</span> <a href="#" style="background: var(--accent-glow);">Technical Roadmap</a>
+  <span>·</span>
+  <a href="index.html">Live System Demo →</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav" style="top: 37px;">
+  <div class="nav-logo">PRIZINO TREASURY <span>Technical Roadmap</span></div>
+  <div class="nav-links">
+    <a href="#overview" class="active">Overview</a>
+    <a href="#architecture">Architecture</a>
+    <a href="#phases">Phases</a>
+    <a href="#plugins">Plugins</a>
+    <a href="#deliverables">Deliverables</a>
+    <a href="#pricing">Pricing</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" style="padding-top: 160px;">
+  <div class="hero-badge"><span class="dot"></span> Full Project Breakdown</div>
+  <h1>Build the <span class="gold">Prizino Treasury</span><br>Gamified <span class="accent">Prize Shop</span></h1>
+  <p>A custom WooCommerce multi-vendor prize shop with gamification, points economy, Star Picks, and a premium floating action bar — built to scale.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">4</div><div class="label">Development Phases</div></div>
+    <div class="hero-stat"><div class="num">7+</div><div class="label">Plugin Integrations</div></div>
+    <div class="hero-stat"><div class="num">3</div><div class="label">Custom Templates</div></div>
+    <div class="hero-stat"><div class="num">21</div><div class="label">Days Delivery</div></div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section class="section" id="overview">
+  <div class="section-header reveal">
+    <div class="section-label">Project Overview</div>
+    <div class="section-title">What We're Building</div>
+    <p class="section-desc">A gamified WooCommerce "Treasury" where users play games to win points (Tokenz & Dimenz) and redeem them for real prizes in a multi-vendor shop.</p>
+  </div>
+  <div class="overview-grid">
+    <div class="ov-card reveal">
+      <span class="ov-icon">🏪</span>
+      <h3>Custom Shop Templates</h3>
+      <p>Three fully custom WooCommerce templates — Shop Home (Treasury), Explore/Category pages, and Single Product page. Dark premium UI matching Prizino brand.</p>
+      <span class="tag tag-core">Core Build</span>
+    </div>
+    <div class="ov-card reveal">
+      <span class="ov-icon">⭐</span>
+      <h3>Star Pick System</h3>
+      <p>Users choose any Treasury item as their weekly "Star Pick." System tracks picks, runs draws, and awards winners. Custom logic built on MyCred hooks.</p>
+      <span class="tag tag-custom">Custom Plugin</span>
+    </div>
+    <div class="ov-card reveal">
+      <span class="ov-icon">🎯</span>
+      <h3>Floating Action Bar</h3>
+      <p>Sticky bottom bar on all pages: Menu, Star Pick, Play, Info, Bag, and countdown timer. Clean pop-ups for each action. Mobile-first, always accessible.</p>
+      <span class="tag tag-core">Core Build</span>
+    </div>
+    <div class="ov-card reveal">
+      <span class="ov-icon">💰</span>
+      <h3>Dual Currency System</h3>
+      <p>Products priced in both Dimenz (points) and EUR. MyCred-powered wallet with Tokenz (earned) and Dimenz (redeemable). Points visible everywhere.</p>
+      <span class="tag tag-plugin">Plugin Integration</span>
+    </div>
+    <div class="ov-card reveal">
+      <span class="ov-icon">🏬</span>
+      <h3>Multi-Vendor Marketplace</h3>
+      <p>MarketKing integration for vendor management. Vendor rules enforcement: product limits, approval workflows, commission handling, and brand guidelines.</p>
+      <span class="tag tag-plugin">Plugin Integration</span>
+    </div>
+    <div class="ov-card reveal">
+      <span class="ov-icon">🎮</span>
+      <h3>Gamification Loop</h3>
+      <p>Complete engagement loop: Play games → Earn Tokenz → Convert to Dimenz → Browse Treasury → Redeem prizes. Plus referral rewards via SliceWP.</p>
+      <span class="tag tag-custom">Custom Plugin</span>
+    </div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section class="section" id="architecture">
+  <div class="section-header reveal">
+    <div class="section-label">System Architecture</div>
+    <div class="section-title">How Everything Connects</div>
+    <p class="section-desc">Layer-by-layer breakdown of the full tech stack — from the user-facing UI down to the data layer.</p>
+  </div>
+  <div class="arch-diagram reveal">
+    <div class="arch-layers">
+      <div class="arch-layer">
+        <div class="arch-layer-label">Frontend UI</div>
+        <div class="arch-boxes">
+          <div class="arch-box purple">Custom Shop Template</div>
+          <div class="arch-box purple">Single Product Template</div>
+          <div class="arch-box purple">Explore/Category Template</div>
+          <div class="arch-box gold">Floating Action Bar</div>
+          <div class="arch-box gold">Pop-up Modals</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Gamification Layer</div>
+        <div class="arch-boxes">
+          <div class="arch-box gold">Star Pick Engine</div>
+          <div class="arch-box gold">Points Display Widget</div>
+          <div class="arch-box gold">Countdown Timer</div>
+          <div class="arch-box gold">Leaving Soon Logic</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Plugin Layer</div>
+        <div class="arch-boxes">
+          <div class="arch-box teal">WooCommerce</div>
+          <div class="arch-box teal">MyCred</div>
+          <div class="arch-box teal">MarketKing</div>
+          <div class="arch-box teal">CheckoutWP</div>
+          <div class="arch-box teal">SliceWP</div>
+          <div class="arch-box teal">Sassy Social</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Backend / API</div>
+        <div class="arch-boxes">
+          <div class="arch-box green">WP REST API</div>
+          <div class="arch-box green">MyCred Hooks</div>
+          <div class="arch-box green">WooCommerce Hooks</div>
+          <div class="arch-box green">Custom AJAX Handlers</div>
+        </div>
+      </div>
+      <div class="arch-arrow">↕</div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Data / Media</div>
+        <div class="arch-boxes">
+          <div class="arch-box red">MySQL (WP + Woo + MyCred)</div>
+          <div class="arch-box red">AWS S3 (Video via WP Video Magic)</div>
+          <div class="arch-box red">WP Media Library</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHASES -->
+<section class="section" id="phases">
+  <div class="section-header reveal">
+    <div class="section-label">Development Phases</div>
+    <div class="section-title">Step-by-Step Roadmap</div>
+    <p class="section-desc">Four phases over 3 weeks — from foundation setup to final QA and launch.</p>
+  </div>
+
+  <div class="timeline">
+
+    <!-- Phase 1 -->
+    <div class="phase p1 reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-num">Phase 1</span>
+        <span class="phase-title">Foundation & Plugin Stack</span>
+      </div>
+      <div class="phase-duration">Days 1 – 5 &nbsp;·&nbsp; Week 1</div>
+      <div class="phase-tasks">
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">WordPress + WooCommerce Setup</div>
+            <div class="task-desc">Install and configure WooCommerce with Prizino-specific settings. Set up child theme for all customizations. Configure permalinks (Treasury → /Treasure/).</div>
+            <div class="task-tags"><span class="task-tag tt-woo">WooCommerce</span><span class="task-tag tt-php">PHP</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">MyCred Points Economy Setup</div>
+            <div class="task-desc">Configure dual-currency system: Tokenz (earned from games) and Dimenz (used for purchases). Set exchange rates, earning rules, and display badges across the site.</div>
+            <div class="task-tags"><span class="task-tag tt-plugin">MyCred</span><span class="task-tag tt-php">PHP</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">MarketKing Multi-Vendor Config</div>
+            <div class="task-desc">Set up MarketKing for multi-vendor. Configure vendor registration, product approval workflows, commission structures, and vendor dashboard.</div>
+            <div class="task-tags"><span class="task-tag tt-plugin">MarketKing</span><span class="task-tag tt-woo">WooCommerce</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">CheckoutWP + SliceWP + Sassy Social</div>
+            <div class="task-desc">Install and configure CheckoutWP for optimized checkout, SliceWP for affiliate/referral tracking, Sassy Social for social sharing on products.</div>
+            <div class="task-tags"><span class="task-tag tt-plugin">CheckoutWP</span><span class="task-tag tt-plugin">SliceWP</span><span class="task-tag tt-plugin">Sassy</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">WP Video Magic (AWS) Integration</div>
+            <div class="task-desc">Set up WP Video Magic with AWS S3/CloudFront for video hosting. Configure product video support and streaming delivery.</div>
+            <div class="task-tags"><span class="task-tag tt-plugin">WP Video Magic</span><span class="task-tag tt-api">AWS</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase p2 reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-num">Phase 2</span>
+        <span class="phase-title">Custom Templates & UI</span>
+      </div>
+      <div class="phase-duration">Days 6 – 11 &nbsp;·&nbsp; Week 2</div>
+      <div class="phase-tasks">
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Treasury Shop Home Template</div>
+            <div class="task-desc">Custom WooCommerce shop page: Hero section with current prize highlight, Prize Categories grid (Tech & Toys, In & Outdoors, Style & Flex, Mind & Body, Pop & Culture, Collectionz), Star Picks showcase, "Leaving Soon" countdown section, product grid with dual pricing.</div>
+            <div class="task-tags"><span class="task-tag tt-php">PHP</span><span class="task-tag tt-css">CSS</span><span class="task-tag tt-js">JS</span><span class="task-tag tt-woo">WooCommerce</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Explore / Category Template</div>
+            <div class="task-desc">Category archive pages with filtering, sorting by Dimenz/EUR price, grid/list toggle. Category-specific hero banners. Product cards showing point price + fiat price.</div>
+            <div class="task-tags"><span class="task-tag tt-php">PHP</span><span class="task-tag tt-css">CSS</span><span class="task-tag tt-js">JS</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Single Product Page Template</div>
+            <div class="task-desc">Product detail page: large image gallery, variant selector, dual-price display (Dimenz + EUR), "Redeem" button for points / "Buy" for cash, video embed support, vendor info, social share buttons, related prizes.</div>
+            <div class="task-tags"><span class="task-tag tt-php">PHP</span><span class="task-tag tt-css">CSS</span><span class="task-tag tt-js">JS</span><span class="task-tag tt-woo">WooCommerce</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Floating Action Bar</div>
+            <div class="task-desc">Sticky bottom bar for all pages. Six actions: Menu (slide-out nav), Star Pick (current pick + change), Play (link to games), Info (help modal), Bag (mini cart), Countdown Timer (next draw). Clean pop-up modals for each. Mobile-first responsive design.</div>
+            <div class="task-tags"><span class="task-tag tt-js">JS</span><span class="task-tag tt-css">CSS</span><span class="task-tag tt-php">PHP</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Points Wallet UI</div>
+            <div class="task-desc">Visible Tokenz and Dimenz balance everywhere — header bar, action bar, product pages, checkout. Real-time update on purchase. MyCred shortcode integration + custom display widget.</div>
+            <div class="task-tags"><span class="task-tag tt-plugin">MyCred</span><span class="task-tag tt-js">JS</span><span class="task-tag tt-css">CSS</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase p3 reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-num">Phase 3</span>
+        <span class="phase-title">Gamification & Custom Logic</span>
+      </div>
+      <div class="phase-duration">Days 12 – 17 &nbsp;·&nbsp; Week 3 (first half)</div>
+      <div class="phase-tasks">
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Star Pick Custom Plugin</div>
+            <div class="task-desc">Custom WordPress plugin: Users select 1 product as their weekly "Star Pick." Stores pick in user meta. Validation: 1 pick per user per week. Admin draw system to select winner. Notification on win. History of picks in user account.</div>
+            <div class="task-tags"><span class="task-tag tt-php">PHP</span><span class="task-tag tt-woo">WooCommerce</span><span class="task-tag tt-api">REST API</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Points Redemption at Checkout</div>
+            <div class="task-desc">MyCred gateway integration: allow full or partial point redemption at checkout. Show Dimenz balance, deduction preview, and remaining balance. CheckoutWP-compatible. Enforce buy limits per user.</div>
+            <div class="task-tags"><span class="task-tag tt-plugin">MyCred</span><span class="task-tag tt-plugin">CheckoutWP</span><span class="task-tag tt-php">PHP</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Product Rules & Limits</div>
+            <div class="task-desc">Enforce per-product and per-user purchase limits. Free delivery flag per product. Multi-vendor rules: who can list what, price caps, category restrictions. Admin override controls.</div>
+            <div class="task-tags"><span class="task-tag tt-php">PHP</span><span class="task-tag tt-woo">WooCommerce</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">"Leaving Soon" Auto-Rotation</div>
+            <div class="task-desc">Scheduled cron job to rotate products in/out of the Treasury. "Leaving Soon" section auto-populated based on expiry date meta field. Countdown timers per product.</div>
+            <div class="task-tags"><span class="task-tag tt-php">PHP</span><span class="task-tag tt-js">JS</span><span class="task-tag tt-woo">WooCommerce</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Vendor Rules Enforcement</div>
+            <div class="task-desc">MarketKing custom rules: product submission guidelines, mandatory fields, image requirements, pricing constraints. Admin approval queue with preview. Vendor notification system.</div>
+            <div class="task-tags"><span class="task-tag tt-plugin">MarketKing</span><span class="task-tag tt-php">PHP</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase p4 reveal">
+      <div class="phase-dot"></div>
+      <div class="phase-header">
+        <span class="phase-num">Phase 4</span>
+        <span class="phase-title">Integration Testing & Launch</span>
+      </div>
+      <div class="phase-duration">Days 18 – 21 &nbsp;·&nbsp; Week 3 (final)</div>
+      <div class="phase-tasks">
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Full Integration Testing</div>
+            <div class="task-desc">End-to-end testing: Browse → Star Pick → Play Games → Earn Tokenz → Convert Dimenz → Browse Treasury → Add to Cart → Checkout with Points → Order Complete. Cross-plugin conflict resolution.</div>
+            <div class="task-tags"><span class="task-tag tt-woo">WooCommerce</span><span class="task-tag tt-plugin">All Plugins</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Mobile Responsiveness QA</div>
+            <div class="task-desc">Test all templates at 375px, 768px, 1024px, 1440px. Floating action bar touch targets. Modal interactions on mobile. Performance audit (Core Web Vitals).</div>
+            <div class="task-tags"><span class="task-tag tt-css">CSS</span><span class="task-tag tt-js">JS</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Performance & Security Hardening</div>
+            <div class="task-desc">Optimize database queries, lazy-load images, minify assets. Security audit: nonce verification on all AJAX, input sanitization, capability checks. Rate-limit sensitive endpoints.</div>
+            <div class="task-tags"><span class="task-tag tt-php">PHP</span><span class="task-tag tt-js">JS</span></div>
+          </div>
+        </div>
+        <div class="phase-task">
+          <div class="task-check"></div>
+          <div class="task-content">
+            <div class="task-title">Documentation & Handoff</div>
+            <div class="task-desc">Admin guide for managing prizes, vendors, points economy. Developer documentation for custom plugin. Deployment checklist. 1-week post-launch support period.</div>
+            <div class="task-tags"><span class="task-tag tt-woo">Docs</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PLUGINS -->
+<section class="section" id="plugins">
+  <div class="section-header reveal">
+    <div class="section-label">Plugin Ecosystem</div>
+    <div class="section-title">Plugins & Integrations</div>
+    <p class="section-desc">Every plugin pre-configured and deeply integrated — plus custom plugins where needed. All premium plugins provided at no extra cost.</p>
+  </div>
+  <div class="plugin-grid">
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-woo">🟣</div>
+      <div class="plugin-info">
+        <h4>WooCommerce</h4>
+        <p>Core e-commerce engine. Custom templates override default shop, archive, and single product. REST API extended for points and Star Picks.</p>
+        <span class="pill pill-free">Free</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-mycred">🪙</div>
+      <div class="plugin-info">
+        <h4>MyCred</h4>
+        <p>Points management: Tokenz + Dimenz dual currency. Gateway for checkout redemption. Hooks for game earnings. Balance display widgets.</p>
+        <span class="pill pill-premium">Premium — Provided Free</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-market">🏪</div>
+      <div class="plugin-info">
+        <h4>MarketKing</h4>
+        <p>Multi-vendor marketplace. Vendor dashboards, product approval, commissions, vendor-specific rules and restrictions.</p>
+        <span class="pill pill-premium">Premium — Provided Free</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-checkout">✅</div>
+      <div class="plugin-info">
+        <h4>CheckoutWP</h4>
+        <p>Optimized multi-step checkout. Integrated with MyCred points redemption. Clean, conversion-focused design matching Treasury theme.</p>
+        <span class="pill pill-premium">Premium — Provided Free</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-slice">🔗</div>
+      <div class="plugin-info">
+        <h4>SliceWP</h4>
+        <p>Affiliate & referral system. Track referrals from shared product links. Award Tokenz for successful referrals — feeds the gamification loop.</p>
+        <span class="pill pill-premium">Premium — Provided Free</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-sassy">📱</div>
+      <div class="plugin-info">
+        <h4>Sassy Social Share</h4>
+        <p>Social sharing buttons on product pages and star picks. Custom share messages with product name + prize value.</p>
+        <span class="pill pill-free">Free</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-video">🎬</div>
+      <div class="plugin-info">
+        <h4>WP Video Magic (AWS)</h4>
+        <p>AWS-hosted video for product showcases. S3 storage + CloudFront CDN delivery. Embedded in single product template.</p>
+        <span class="pill pill-premium">Premium — Provided Free</span>
+      </div>
+    </div>
+    <div class="plugin-card reveal">
+      <div class="plugin-icon pi-custom">⚡</div>
+      <div class="plugin-info">
+        <h4>Prizino Star Pick Plugin</h4>
+        <p>Fully custom-built plugin for the Star Pick system. Weekly picks, admin draw, winner notification, history tracking. No existing plugin does this.</p>
+        <span class="pill pill-custom">Custom Built</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="section" id="deliverables">
+  <div class="section-header reveal">
+    <div class="section-label">Deliverables</div>
+    <div class="section-title">What You Get</div>
+    <p class="section-desc">Complete breakdown of everything included in the project.</p>
+  </div>
+  <table class="del-table reveal">
+    <thead>
+      <tr>
+        <th>Deliverable</th>
+        <th>Type</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Treasury Shop Home Template</td>
+        <td>Custom WooCommerce Template</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Explore / Category Template</td>
+        <td>Custom WooCommerce Template</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Single Product Page Template</td>
+        <td>Custom WooCommerce Template</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Floating Action Bar (6 actions + pop-ups)</td>
+        <td>Custom Component</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Star Pick Custom Plugin</td>
+        <td>Custom WordPress Plugin</td>
+        <td><span class="status-badge sb-custom">★ Custom Built</span></td>
+      </tr>
+      <tr>
+        <td>MyCred Dual Currency (Tokenz + Dimenz)</td>
+        <td>Plugin Config + Custom Hooks</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Points Redemption at Checkout</td>
+        <td>MyCred + CheckoutWP Integration</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>MarketKing Multi-Vendor Setup</td>
+        <td>Plugin Config + Vendor Rules</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Product Purchase Limits</td>
+        <td>Custom WooCommerce Logic</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>"Leaving Soon" Auto-Rotation</td>
+        <td>Custom Cron + UI</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>WP Video Magic (AWS) Setup</td>
+        <td>Plugin Integration</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>SliceWP Referral System</td>
+        <td>Plugin Config + Tokenz Hook</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Mobile Responsive (375px–1440px)</td>
+        <td>QA & Optimization</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>Admin Documentation</td>
+        <td>PDF Guide</td>
+        <td><span class="status-badge sb-included">✓ Included</span></td>
+      </tr>
+      <tr>
+        <td>All Premium Plugins (licenses)</td>
+        <td>Provided at no cost</td>
+        <td><span class="status-badge sb-custom">★ Free Bonus</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- PRICING -->
+<section class="section" id="pricing">
+  <div class="section-header reveal">
+    <div class="section-label">Investment</div>
+    <div class="section-title">Transparent Pricing</div>
+    <p class="section-desc">Choose the package that fits your scope. All packages include premium plugins at no extra cost.</p>
+  </div>
+  <div class="pricing-cards">
+    <div class="price-card reveal">
+      <h3>Essential</h3>
+      <div class="price">$294 <span>USD</span></div>
+      <p class="price-desc">Core Treasury build with all templates and plugin integrations.</p>
+      <ul class="price-features">
+        <li>3 Custom WooCommerce Templates</li>
+        <li>Floating Action Bar + Pop-ups</li>
+        <li>MyCred Dual Currency Setup</li>
+        <li>Points Redemption at Checkout</li>
+        <li>MarketKing Multi-Vendor Config</li>
+        <li>All Premium Plugins Included Free</li>
+        <li>Mobile Responsive</li>
+        <li class="not">Star Pick Custom Plugin</li>
+        <li class="not">Leaving Soon Auto-Rotation</li>
+        <li class="not">Advanced Vendor Rules</li>
+      </ul>
+    </div>
+    <div class="price-card featured reveal">
+      <h3>Complete Treasury</h3>
+      <div class="price" style="color: var(--accent);">$394 <span>USD</span></div>
+      <p class="price-desc">Everything in Essential + full gamification engine and custom plugins.</p>
+      <ul class="price-features">
+        <li>Everything in Essential</li>
+        <li>Star Pick Custom Plugin (full build)</li>
+        <li>"Leaving Soon" Auto-Rotation + Cron</li>
+        <li>Advanced Vendor Rules & Limits</li>
+        <li>Product Purchase Limits per User</li>
+        <li>SliceWP Referral → Tokenz Hook</li>
+        <li>WP Video Magic (AWS) Integration</li>
+        <li>Sassy Social Share Config</li>
+        <li>Full Integration Testing</li>
+        <li>Admin Documentation + Handoff</li>
+        <li>1-Week Post-Launch Support</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="reveal">What I'm Bringing to the Table</h2>
+  <p class="reveal">Everything you need — no hidden costs, no fragile hacks.</p>
+  <div class="cta-offers reveal">
+    <div class="cta-pill"><span class="check">✓</span> All Premium Plugins — Free</div>
+    <div class="cta-pill"><span class="check">✓</span> Custom Star Pick Plugin Built</div>
+    <div class="cta-pill"><span class="check">✓</span> Clean, Scalable Code (No Hacks)</div>
+    <div class="cta-pill"><span class="check">✓</span> Mobile-First Responsive UI</div>
+    <div class="cta-pill"><span class="check">✓</span> 1-Week Post-Launch Support</div>
+    <div class="cta-pill"><span class="check">✓</span> Full Admin Documentation</div>
+    <div class="cta-pill"><span class="check">✓</span> 3-Week Delivery Timeline</div>
+    <div class="cta-pill"><span class="check">✓</span> Performance Optimized</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>Prizino Treasury — Technical Roadmap & Project Plan &nbsp;·&nbsp; Prepared for Prizino Team</p>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// Active nav link on scroll
+const sections = document.querySelectorAll('.section, .hero');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 200) current = s.getAttribute('id') || '';
+  });
+  navLinks.forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>
