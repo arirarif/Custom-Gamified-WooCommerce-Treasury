@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlayStation 5 Pro — Prizino Treasury</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F5E6CA;
+  --bg-card: #ffffff;
+  --bg-card-alt: #FDF6EC;
+  --bg-surface: #ffffff;
+  --accent: #6c5ce7;
+  --accent-light: rgba(108, 92, 231, 0.08);
+  --gold: #c49a20;
+  --gold-dark: #a07d10;
+  --gold-bg: rgba(196, 154, 32, 0.08);
+  --teal: #0a8f8c;
+  --teal-bg: rgba(10, 143, 140, 0.06);
+  --green: #0a8060;
+  --green-bg: rgba(10, 128, 96, 0.06);
+  --red: #d44;
+  --red-bg: rgba(221, 68, 68, 0.06);
+  --text: #2a2520;
+  --text-dim: #6b6055;
+  --text-muted: #9a9088;
+  --border: rgba(0,0,0,0.08);
+  --border-hover: rgba(0,0,0,0.15);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
+
+/* ═══════════════════════════════════
+   TOP NAV (shared)
+   ═══════════════════════════════════ */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 56px;
+  background: rgba(245, 230, 202, 0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.top-nav-left { display: flex; align-items: center; gap: 24px; }
+.tn-logo {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px;
+  color: var(--gold); letter-spacing: -0.5px; cursor: pointer; text-decoration: none;
+}
+.tn-links { display: flex; gap: 4px; }
+.tn-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 13px; font-weight: 500;
+  padding: 6px 14px; border-radius: 8px; transition: all .2s; cursor: pointer;
+}
+.tn-links a:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+.tn-links a.active { color: var(--gold-dark); background: var(--gold-bg); font-weight: 600; }
+.top-nav-right { display: flex; align-items: center; gap: 16px; }
+.wallet-pill {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px;
+  padding: 6px 16px; font-size: 12px; font-weight: 600;
+}
+.wp-tz { color: var(--teal); }
+.wp-dz { color: var(--gold); }
+.wp-pr { color: var(--accent); }
+.wp-sep { width: 1px; height: 16px; background: var(--border); }
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--gold));
+  display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;
+  color: #fff; cursor: pointer;
+}
+
+/* ═══════════════════════════════════
+   SWITCH BAR (shared)
+   ═══════════════════════════════════ */
+.switch-bar {
+  position: fixed; top: 56px; left: 0; right: 0; z-index: 190;
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px 24px; font-size: 13px;
+}
+.switch-bar span { color: var(--text-muted); }
+.switch-bar a {
+  color: var(--accent); text-decoration: none; font-weight: 600;
+  padding: 4px 14px; border-radius: 100px; transition: all .2s;
+  border: 1px solid rgba(108,92,231,0.15);
+}
+.switch-bar a:hover { background: var(--accent-light); }
+.switch-bar a.active-page { background: var(--accent-light); }
+
+/* ═══════════════════════════════════
+   BREADCRUMB
+   ═══════════════════════════════════ */
+.breadcrumb {
+  margin-top: 96px; padding: 16px 48px; max-width: 1100px; margin-left: auto; margin-right: auto;
+  display: flex; align-items: center; gap: 8px; font-size: 13px;
+}
+.breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color .2s; }
+.breadcrumb a:hover { color: var(--text); }
+.breadcrumb .sep { color: var(--text-muted); }
+.breadcrumb .current { color: var(--text); font-weight: 600; }
+
+/* ═══════════════════════════════════
+   PRODUCT LAYOUT
+   ═══════════════════════════════════ */
+.product-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+  padding: 24px 48px 48px; max-width: 1100px; margin: 0 auto;
+}
+
+/* Gallery */
+.gallery { position: sticky; top: 110px; align-self: start; }
+.gallery-main {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  height: 420px; display: flex; align-items: center; justify-content: center;
+  font-size: 140px; position: relative; overflow: hidden; box-shadow: var(--shadow);
+  margin-bottom: 12px;
+}
+.gallery-badge {
+  position: absolute; top: 16px; left: 16px;
+  background: var(--gold); color: #fff; font-size: 10px; font-weight: 700;
+  padding: 4px 12px; border-radius: 100px;
+}
+.gallery-badge.badge-limited { background: var(--red); }
+.gallery-badge.badge-new { background: var(--accent); }
+.gallery-thumbs { display: flex; gap: 8px; }
+.gallery-thumb {
+  width: 72px; height: 72px; border-radius: var(--radius-sm); border: 2px solid var(--border);
+  background: var(--bg-card); display: flex; align-items: center; justify-content: center;
+  font-size: 28px; cursor: pointer; transition: border-color .2s;
+}
+.gallery-thumb:hover { border-color: var(--border-hover); }
+.gallery-thumb.active { border-color: var(--accent); }
+
+/* Product Info */
+.product-info {}
+.pi-vendor {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--teal); font-weight: 600;
+  background: var(--teal-bg); padding: 4px 12px; border-radius: 100px;
+  margin-bottom: 12px;
+}
+.pi-title {
+  font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700;
+  letter-spacing: -1px; margin-bottom: 6px; line-height: 1.2;
+}
+.pi-category { font-size: 13px; color: var(--text-muted); margin-bottom: 24px; }
+
+/* Prices */
+.pi-prices {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+.pi-dimenz-price {
+  font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; color: var(--gold);
+}
+.pi-eur-price { font-size: 18px; color: var(--text-dim); }
+.pi-delivery {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--green); font-weight: 600;
+  background: var(--green-bg); padding: 4px 10px; border-radius: 6px;
+}
+
+/* Description */
+.pi-desc-title {
+  font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px;
+}
+.pi-desc {
+  font-size: 14px; color: var(--text-dim); line-height: 1.8; margin-bottom: 24px;
+}
+
+/* Variants */
+.pi-variants-title {
+  font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 8px;
+}
+.pi-variants { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.pi-variant {
+  padding: 10px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600;
+  background: var(--bg-card); border: 1px solid var(--border); cursor: pointer; transition: all .2s;
+}
+.pi-variant:hover { border-color: var(--border-hover); }
+.pi-variant.sel { border-color: rgba(108,92,231,0.3); background: var(--accent-light); color: var(--accent); }
+
+/* Actions */
+.pi-actions { display: flex; gap: 12px; margin-bottom: 16px; }
+.pi-btn {
+  flex: 1; padding: 16px; border-radius: 12px; font-size: 15px; font-weight: 700;
+  border: none; cursor: pointer; transition: all .2s; font-family: 'Space Grotesk', sans-serif;
+  text-align: center;
+}
+.pi-btn-redeem { background: var(--gold); color: #fff; }
+.pi-btn-redeem:hover { transform: scale(1.02); box-shadow: 0 4px 16px rgba(196,154,32,0.2); }
+.pi-btn-buy { background: var(--accent); color: #fff; }
+.pi-btn-buy:hover { transform: scale(1.02); box-shadow: 0 4px 16px rgba(108,92,231,0.2); }
+.pi-star-btn {
+  width: 100%; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600;
+  background: var(--gold-bg); border: 1px dashed rgba(196,154,32,0.3);
+  color: var(--gold-dark); cursor: pointer; transition: all .2s; margin-bottom: 24px;
+}
+.pi-star-btn:hover { background: rgba(196,154,32,0.12); }
+
+/* Meta Table */
+.pi-meta {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow);
+}
+.pi-meta-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.pi-meta-row:last-child { border: none; }
+.pi-meta-row .label { color: var(--text-muted); }
+.pi-meta-row .value { font-weight: 600; }
+.pi-meta-row .value a { color: var(--accent); text-decoration: none; }
+
+/* ═══════════════════════════════════
+   TABS SECTION (below product)
+   ═══════════════════════════════════ */
+.tabs-section {
+  padding: 0 48px 48px; max-width: 1100px; margin: 0 auto;
+}
+.tabs-nav {
+  display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 32px;
+}
+.tab-btn {
+  padding: 12px 24px; font-size: 14px; font-weight: 600; color: var(--text-muted);
+  border: none; background: none; cursor: pointer; transition: all .2s;
+  border-bottom: 2px solid transparent; font-family: 'Inter', sans-serif;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Reviews */
+.reviews-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.review-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 24px; box-shadow: var(--shadow);
+}
+.review-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.review-avatar {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--bg-card-alt);
+  display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;
+  color: var(--text-dim);
+}
+.review-name { font-size: 13px; font-weight: 600; }
+.review-date { font-size: 11px; color: var(--text-muted); }
+.review-stars { font-size: 14px; color: var(--gold); margin-bottom: 8px; letter-spacing: 2px; }
+.review-text { font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+
+/* Specs */
+.specs-table {
+  width: 100%; border-collapse: collapse;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow);
+}
+.specs-table tr { border-bottom: 1px solid var(--border); }
+.specs-table tr:last-child { border: none; }
+.specs-table td { padding: 12px 20px; font-size: 13px; }
+.specs-table td:first-child { color: var(--text-muted); width: 180px; font-weight: 500; }
+.specs-table td:last-child { font-weight: 600; }
+
+/* Vendor Info */
+.vendor-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 32px; display: flex; align-items: center; gap: 24px; box-shadow: var(--shadow);
+}
+.vendor-logo {
+  width: 64px; height: 64px; border-radius: 16px; background: var(--bg-card-alt);
+  display: flex; align-items: center; justify-content: center; font-size: 28px;
+}
+.vendor-info h3 { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.vendor-info p { font-size: 13px; color: var(--text-dim); line-height: 1.6; max-width: 500px; }
+.vendor-stats { display: flex; gap: 24px; margin-top: 12px; }
+.vendor-stat { text-align: center; }
+.vendor-stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); }
+.vendor-stat-label { font-size: 11px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════
+   RELATED PRODUCTS
+   ═══════════════════════════════════ */
+.related-section {
+  padding: 0 48px 120px; max-width: 1100px; margin: 0 auto;
+}
+.related-title {
+  font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700;
+  margin-bottom: 20px;
+}
+.related-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.related-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; cursor: pointer; transition: all .25s; text-decoration: none;
+  color: inherit; box-shadow: var(--shadow);
+}
+.related-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.related-img {
+  height: 140px; background: var(--bg-card-alt); display: flex;
+  align-items: center; justify-content: center; font-size: 40px;
+}
+.related-body { padding: 16px; }
+.related-body h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; }
+.related-body .r-price { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: var(--gold); }
+
+/* ═══════════════════════════════════
+   FLOATING ACTION BAR (shared)
+   ═══════════════════════════════════ */
+.fab {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 300;
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(24px);
+  border: 1px solid var(--border); border-radius: 100px;
+  padding: 8px 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+.fab-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 16px; border-radius: 16px; cursor: pointer; transition: all .2s;
+  position: relative;
+}
+.fab-item:hover { background: rgba(0,0,0,0.04); }
+.fab-icon { font-size: 20px; }
+.fab-label { font-size: 9px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; }
+.fab-badge {
+  position: absolute; top: 2px; right: 8px; width: 16px; height: 16px;
+  background: var(--red); border-radius: 50%; font-size: 9px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+}
+.fab-divider { width: 1px; height: 32px; background: var(--border); margin: 0 4px; }
+.fab-timer {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 20px; border-radius: 16px;
+  background: var(--accent-light); border: 1px solid rgba(108,92,231,0.1);
+  cursor: pointer;
+}
+.fab-timer-val { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--accent); }
+.fab-timer-label { font-size: 8px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; }
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .product-layout { grid-template-columns: 1fr; gap: 32px; }
+  .gallery { position: static; }
+  .reviews-grid { grid-template-columns: 1fr; }
+  .related-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .top-nav { padding: 0 16px; }
+  .tn-links { display: none; }
+  .wallet-pill { display: none; }
+  .product-layout { padding: 16px; }
+  .breadcrumb { padding: 12px 16px; }
+  .tabs-section { padding: 0 16px 32px; }
+  .related-section { padding: 0 16px 100px; }
+  .gallery-main { height: 300px; font-size: 100px; }
+  .pi-title { font-size: 24px; }
+  .pi-dimenz-price { font-size: 28px; }
+  .fab { padding: 6px 8px; gap: 0; }
+  .fab-item { padding: 6px 10px; }
+  .fab-label { font-size: 8px; }
+}
+@media (max-width: 480px) {
+  .related-grid { grid-template-columns: 1fr; }
+  .pi-actions { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- SWITCH BAR -->
+<div class="switch-bar">
+  <a href="index.html">Shop Home</a>
+  <a href="explore.html">Explore</a>
+  <a href="product.html" class="active-page">Product Page</a>
+  <span>·</span>
+  <a href="project-roadmap.html">Technical Roadmap →</a>
+</div>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a href="index.html" class="tn-logo">PRIZINO</a>
+    <div class="tn-links">
+      <a href="#">Games</a>
+      <a href="index.html" class="active">Treasury</a>
+      <a href="#">The Mint</a>
+      <a href="#">Winners</a>
+      <a href="#">Rewards</a>
+    </div>
+  </div>
+  <div class="top-nav-right">
+    <div class="wallet-pill">
+      <span class="wp-tz">TZ 4,280</span>
+      <span class="wp-sep"></span>
+      <span class="wp-dz">DZ 1,650</span>
+      <span class="wp-sep"></span>
+      <span class="wp-pr">PR 12</span>
+    </div>
+    <div class="user-avatar">M</div>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Treasury</a>
+  <span class="sep">›</span>
+  <a href="explore.html">Tech & Toys</a>
+  <span class="sep">›</span>
+  <span class="current">PlayStation 5 Pro Console</span>
+</div>
+
+<!-- PRODUCT LAYOUT -->
+<div class="product-layout">
+
+  <!-- GALLERY (left) -->
+  <div class="gallery">
+    <div class="gallery-main">
+      <span class="gallery-badge">Free Delivery</span>
+      <span id="mainEmoji">🎮</span>
+    </div>
+    <div class="gallery-thumbs">
+      <div class="gallery-thumb active" data-emoji="🎮">🎮</div>
+      <div class="gallery-thumb" data-emoji="🕹️">🕹️</div>
+      <div class="gallery-thumb" data-emoji="📦">📦</div>
+      <div class="gallery-thumb" data-emoji="🎧">🎧</div>
+    </div>
+  </div>
+
+  <!-- PRODUCT INFO (right) -->
+  <div class="product-info">
+
+    <div class="pi-vendor">🏪 Sony Official</div>
+    <h1 class="pi-title">Sony PlayStation 5 Pro Console</h1>
+    <div class="pi-category">Tech & Toys · Consoles</div>
+
+    <div class="pi-prices">
+      <span class="pi-dimenz-price">DZ 3,200</span>
+      <span class="pi-eur-price">€349.00</span>
+      <span class="pi-delivery">✓ Free Delivery</span>
+    </div>
+
+    <div class="pi-desc-title">About This Prize</div>
+    <p class="pi-desc">
+      The PS5 Pro Console delivers enhanced performance for the most demanding games.
+      Features 2TB storage, Wi-Fi 7 support, and a sleek new design. Ray tracing,
+      8K output support, and ultra-high speed SSD make this the ultimate gaming console.
+      Includes DualSense wireless controller and ASTRO's Playroom pre-installed.
+    </p>
+
+    <div class="pi-variants-title">Choose Variant</div>
+    <div class="pi-variants">
+      <div class="pi-variant sel">Standard Edition</div>
+      <div class="pi-variant">Digital Edition</div>
+      <div class="pi-variant">Bundle + Controller</div>
+    </div>
+
+    <div class="pi-actions">
+      <button class="pi-btn pi-btn-redeem">⚡ Redeem with DZ 3,200</button>
+      <button class="pi-btn pi-btn-buy">Buy for €349.00</button>
+    </div>
+    <button class="pi-star-btn">⭐ Set as my Star Pick this week</button>
+
+    <div class="pi-meta">
+      <div class="pi-meta-row">
+        <span class="label">Vendor</span>
+        <span class="value">Sony Official</span>
+      </div>
+      <div class="pi-meta-row">
+        <span class="label">Category</span>
+        <span class="value">Tech & Toys</span>
+      </div>
+      <div class="pi-meta-row">
+        <span class="label">Delivery</span>
+        <span class="value" style="color: var(--green);">Free — 3-5 days</span>
+      </div>
+      <div class="pi-meta-row">
+        <span class="label">Purchase Limit</span>
+        <span class="value">1 per user</span>
+      </div>
+      <div class="pi-meta-row">
+        <span class="label">Points Required</span>
+        <span class="value" style="color: var(--gold);">DZ 3,200 (full) or partial + cash</span>
+      </div>
+      <div class="pi-meta-row">
+        <span class="label">Share</span>
+        <span class="value"><a href="#">Facebook</a> · <a href="#">Twitter</a> · <a href="#">WhatsApp</a></span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TABS SECTION -->
+<div class="tabs-section">
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="reviews">Reviews (24)</button>
+    <button class="tab-btn" data-tab="specs">Specifications</button>
+    <button class="tab-btn" data-tab="vendor">About Vendor</button>
+  </div>
+
+  <!-- Reviews Tab -->
+  <div class="tab-panel active" id="tab-reviews">
+    <div class="reviews-grid">
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">JD</div>
+          <div>
+            <div class="review-name">John D.</div>
+            <div class="review-date">Redeemed 2 weeks ago</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">Redeemed this with 3,200 DZ I saved up over 2 months of playing. Arrived in 4 days, brand new sealed. The whole process was smoother than I expected!</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">SM</div>
+          <div>
+            <div class="review-name">Sarah M.</div>
+            <div class="review-date">Bought 1 month ago</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★☆</div>
+        <div class="review-text">Used a mix of Dimenz + cash (paid €134 after 1,072 DZ discount). Great deal compared to retail. Only 4 stars because delivery took 6 days.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">AK</div>
+          <div>
+            <div class="review-name">Alex K.</div>
+            <div class="review-date">Won via Star Pick!</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">I WON this as my Star Pick!! Set it on a Wednesday, got the notification Sunday night. Still can't believe it. Prizino is the real deal.</div>
+      </div>
+      <div class="review-card">
+        <div class="review-header">
+          <div class="review-avatar">LC</div>
+          <div>
+            <div class="review-name">Lisa C.</div>
+            <div class="review-date">Redeemed 3 weeks ago</div>
+          </div>
+        </div>
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">Got this for my son's birthday. The checkout with points was super clear — you see exactly how much you save. Highly recommend Prizino Treasury.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Specs Tab -->
+  <div class="tab-panel" id="tab-specs">
+    <table class="specs-table">
+      <tr><td>Platform</td><td>PlayStation 5 Pro</td></tr>
+      <tr><td>Storage</td><td>2TB SSD</td></tr>
+      <tr><td>Resolution</td><td>Up to 8K</td></tr>
+      <tr><td>Ray Tracing</td><td>Enhanced Hardware RT</td></tr>
+      <tr><td>Connectivity</td><td>Wi-Fi 7, Bluetooth 5.1, USB-C</td></tr>
+      <tr><td>Audio</td><td>Tempest 3D AudioTech</td></tr>
+      <tr><td>Controller</td><td>DualSense Wireless (included)</td></tr>
+      <tr><td>Dimensions</td><td>358 × 216 × 98 mm</td></tr>
+      <tr><td>Weight</td><td>3.2 kg</td></tr>
+      <tr><td>In the Box</td><td>Console, Controller, HDMI 2.1 Cable, USB-C Cable, Power Cord, Quick Start Guide</td></tr>
+    </table>
+  </div>
+
+  <!-- Vendor Tab -->
+  <div class="tab-panel" id="tab-vendor">
+    <div class="vendor-card">
+      <div class="vendor-logo">🎮</div>
+      <div>
+        <div class="vendor-info">
+          <h3>Sony Official</h3>
+          <p>Verified vendor on Prizino Treasury. Sony Official provides genuine PlayStation, audio, and entertainment products direct from the manufacturer with full warranty coverage.</p>
+        </div>
+        <div class="vendor-stats">
+          <div class="vendor-stat">
+            <div class="vendor-stat-num">12</div>
+            <div class="vendor-stat-label">Products</div>
+          </div>
+          <div class="vendor-stat">
+            <div class="vendor-stat-num">4.8</div>
+            <div class="vendor-stat-label">Rating</div>
+          </div>
+          <div class="vendor-stat">
+            <div class="vendor-stat-num">342</div>
+            <div class="vendor-stat-label">Redeemed</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RELATED PRODUCTS -->
+<div class="related-section">
+  <div class="related-title">You Might Also Like</div>
+  <div class="related-grid">
+    <a class="related-card" href="product.html">
+      <div class="related-img">📸</div>
+      <div class="related-body">
+        <h4>Canon EOS R50 Mirrorless</h4>
+        <div class="r-price">DZ 2,800</div>
+      </div>
+    </a>
+    <a class="related-card" href="product.html">
+      <div class="related-img">🎧</div>
+      <div class="related-body">
+        <h4>Sony WH-1000XM5</h4>
+        <div class="r-price">DZ 1,500</div>
+      </div>
+    </a>
+    <a class="related-card" href="product.html">
+      <div class="related-img">🕹️</div>
+      <div class="related-body">
+        <h4>Nintendo Switch 2</h4>
+        <div class="r-price">DZ 2,200</div>
+      </div>
+    </a>
+    <a class="related-card" href="product.html">
+      <div class="related-img">⌚</div>
+      <div class="related-body">
+        <h4>Apple Watch Ultra 2</h4>
+        <div class="r-price">DZ 3,600</div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<!-- FLOATING ACTION BAR -->
+<div class="fab">
+  <div class="fab-item" onclick="window.location.href='index.html'">
+    <span class="fab-icon">☰</span>
+    <span class="fab-label">MENU</span>
+  </div>
+  <div class="fab-item">
+    <span class="fab-icon">⭐</span>
+    <span class="fab-label">STAR PICK</span>
+  </div>
+  <div class="fab-item">
+    <span class="fab-icon">🎮</span>
+    <span class="fab-label">PLAY</span>
+  </div>
+  <div class="fab-divider"></div>
+  <div class="fab-item">
+    <span class="fab-icon">ℹ️</span>
+    <span class="fab-label">INFO</span>
+  </div>
+  <div class="fab-item">
+    <span class="fab-icon">🛒</span>
+    <span class="fab-label">BAG</span>
+    <span class="fab-badge">2</span>
+  </div>
+  <div class="fab-divider"></div>
+  <div class="fab-timer">
+    <span class="fab-timer-val" id="fabCountdown">4d 12:37:52</span>
+    <span class="fab-timer-label">Next Draw</span>
+  </div>
+</div>
+
+<script>
+/* ─── GALLERY THUMBS ─── */
+document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+  thumb.addEventListener('click', function() {
+    document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('mainEmoji').textContent = this.dataset.emoji;
+  });
+});
+
+/* ─── VARIANT SELECTION ─── */
+document.querySelectorAll('.pi-variant').forEach(v => {
+  v.addEventListener('click', function() {
+    document.querySelectorAll('.pi-variant').forEach(el => el.classList.remove('sel'));
+    this.classList.add('sel');
+  });
+});
+
+/* ─── TABS ─── */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    this.classList.add('active');
+    document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+  });
+});
+
+/* ─── COUNTDOWN TIMER ─── */
+function updateCountdown() {
+  const now = new Date();
+  const nextSunday = new Date(now);
+  nextSunday.setDate(now.getDate() + (7 - now.getDay()));
+  nextSunday.setHours(20, 0, 0, 0);
+  if (now > nextSunday) nextSunday.setDate(nextSunday.getDate() + 7);
+  const diff = nextSunday - now;
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('fabCountdown').textContent =
+    `${d}d ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>

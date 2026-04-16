@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prizino Treasury — Explore Prizes</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #F5E6CA;
+  --bg-card: #ffffff;
+  --bg-card-alt: #FDF6EC;
+  --bg-surface: #ffffff;
+  --accent: #6c5ce7;
+  --accent-light: rgba(108, 92, 231, 0.08);
+  --gold: #c49a20;
+  --gold-dark: #a07d10;
+  --gold-bg: rgba(196, 154, 32, 0.08);
+  --teal: #0a8f8c;
+  --teal-bg: rgba(10, 143, 140, 0.06);
+  --green: #0a8060;
+  --green-bg: rgba(10, 128, 96, 0.06);
+  --red: #d44;
+  --red-bg: rgba(221, 68, 68, 0.06);
+  --text: #2a2520;
+  --text-dim: #6b6055;
+  --text-muted: #9a9088;
+  --border: rgba(0,0,0,0.08);
+  --border-hover: rgba(0,0,0,0.15);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
+
+/* ═══════════════════════════════════
+   TOP NAV (shared)
+   ═══════════════════════════════════ */
+.top-nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 56px;
+  background: rgba(245, 230, 202, 0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.top-nav-left { display: flex; align-items: center; gap: 24px; }
+.tn-logo {
+  font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 18px;
+  color: var(--gold); letter-spacing: -0.5px; cursor: pointer; text-decoration: none;
+}
+.tn-links { display: flex; gap: 4px; }
+.tn-links a {
+  color: var(--text-dim); text-decoration: none; font-size: 13px; font-weight: 500;
+  padding: 6px 14px; border-radius: 8px; transition: all .2s; cursor: pointer;
+}
+.tn-links a:hover { color: var(--text); background: rgba(0,0,0,0.04); }
+.tn-links a.active { color: var(--gold-dark); background: var(--gold-bg); font-weight: 600; }
+.top-nav-right { display: flex; align-items: center; gap: 16px; }
+.wallet-pill {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 100px;
+  padding: 6px 16px; font-size: 12px; font-weight: 600;
+}
+.wp-tz { color: var(--teal); }
+.wp-dz { color: var(--gold); }
+.wp-pr { color: var(--accent); }
+.wp-sep { width: 1px; height: 16px; background: var(--border); }
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--gold));
+  display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700;
+  color: #fff; cursor: pointer;
+}
+
+/* ═══════════════════════════════════
+   SWITCH BAR (shared)
+   ═══════════════════════════════════ */
+.switch-bar {
+  position: fixed; top: 56px; left: 0; right: 0; z-index: 190;
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px 24px; font-size: 13px;
+}
+.switch-bar span { color: var(--text-muted); }
+.switch-bar a {
+  color: var(--accent); text-decoration: none; font-weight: 600;
+  padding: 4px 14px; border-radius: 100px; transition: all .2s;
+  border: 1px solid rgba(108,92,231,0.15);
+}
+.switch-bar a:hover { background: var(--accent-light); }
+.switch-bar a.active-page { background: var(--accent-light); }
+
+/* ═══════════════════════════════════
+   PAGE HEADER
+   ═══════════════════════════════════ */
+.page-header {
+  margin-top: 96px; padding: 48px 48px 32px; max-width: 1100px; margin-left: auto; margin-right: auto;
+}
+.page-header h1 {
+  font-family: 'Space Grotesk', sans-serif; font-size: 32px; font-weight: 700;
+  letter-spacing: -1px; margin-bottom: 8px;
+}
+.page-header p { font-size: 15px; color: var(--text-dim); max-width: 500px; }
+
+/* ═══════════════════════════════════
+   SEARCH BAR
+   ═══════════════════════════════════ */
+.search-bar {
+  padding: 0 48px; max-width: 1100px; margin: 0 auto 32px;
+}
+.search-wrap {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 20px; box-shadow: var(--shadow); transition: border-color .2s;
+}
+.search-wrap:focus-within { border-color: var(--accent); }
+.search-wrap input {
+  flex: 1; border: none; outline: none; font-size: 14px; font-family: 'Inter', sans-serif;
+  background: transparent; color: var(--text);
+}
+.search-wrap input::placeholder { color: var(--text-muted); }
+.search-icon { font-size: 18px; color: var(--text-muted); }
+.search-count { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+/* ═══════════════════════════════════
+   SIDEBAR + GRID LAYOUT
+   ═══════════════════════════════════ */
+.explore-layout {
+  display: grid; grid-template-columns: 240px 1fr; gap: 32px;
+  padding: 0 48px; max-width: 1100px; margin: 0 auto; padding-bottom: 120px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: sticky; top: 110px; align-self: start;
+}
+.sidebar-section { margin-bottom: 32px; }
+.sidebar-title {
+  font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.2px; color: var(--text-muted);
+  margin-bottom: 12px;
+}
+.sidebar-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.sidebar-list li {
+  font-size: 13px; font-weight: 500; color: var(--text-dim); padding: 8px 12px;
+  border-radius: 8px; cursor: pointer; transition: all .2s;
+}
+.sidebar-list li:hover { background: rgba(0,0,0,0.03); color: var(--text); }
+.sidebar-list li.active { background: var(--accent-light); color: var(--accent); font-weight: 600; }
+.sidebar-list li .count {
+  float: right; font-size: 11px; color: var(--text-muted); font-weight: 400;
+}
+
+.sidebar-range { display: flex; flex-direction: column; gap: 8px; }
+.sidebar-range label { font-size: 12px; color: var(--text-dim); }
+.sidebar-range input[type="range"] {
+  width: 100%; accent-color: var(--accent); height: 4px;
+}
+.sidebar-range .range-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
+
+.sidebar-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.sidebar-chip {
+  font-size: 11px; font-weight: 600; padding: 5px 12px; border-radius: 100px;
+  background: var(--bg-card); border: 1px solid var(--border); color: var(--text-dim);
+  cursor: pointer; transition: all .2s;
+}
+.sidebar-chip:hover { border-color: var(--border-hover); color: var(--text); }
+.sidebar-chip.active { background: var(--teal-bg); border-color: var(--teal); color: var(--teal); }
+
+/* ═══════════════════════════════════
+   GRID TOOLBAR
+   ═══════════════════════════════════ */
+.grid-toolbar {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px;
+}
+.grid-toolbar-left { font-size: 13px; color: var(--text-dim); }
+.grid-toolbar-left strong { color: var(--text); font-weight: 600; }
+.grid-toolbar-right { display: flex; align-items: center; gap: 8px; }
+.sort-select {
+  font-size: 12px; color: var(--text-dim); background: var(--bg-card);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 8px 12px; cursor: pointer; font-family: 'Inter', sans-serif;
+}
+.view-toggle { display: flex; gap: 4px; }
+.view-btn {
+  width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-card); display: flex; align-items: center; justify-content: center;
+  font-size: 14px; cursor: pointer; transition: all .2s;
+}
+.view-btn:hover { border-color: var(--border-hover); }
+.view-btn.active { background: var(--accent-light); border-color: rgba(108,92,231,0.2); }
+
+/* ═══════════════════════════════════
+   PRODUCT GRID
+   ═══════════════════════════════════ */
+.product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.product-card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; cursor: pointer; transition: all .25s; position: relative;
+  box-shadow: var(--shadow); text-decoration: none; color: inherit;
+}
+.product-card:hover { border-color: var(--border-hover); transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.pc-img {
+  height: 200px; background: var(--bg-card-alt); display: flex;
+  align-items: center; justify-content: center; font-size: 56px; position: relative;
+}
+.pc-badges { position: absolute; top: 12px; left: 12px; display: flex; gap: 6px; z-index: 2; }
+.pc-badge {
+  font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.pcb-free { background: var(--green-bg); color: var(--green); }
+.pcb-limited { background: var(--red-bg); color: var(--red); }
+.pcb-new { background: var(--accent-light); color: var(--accent); }
+.pcb-vendor { background: var(--teal-bg); color: var(--teal); }
+.pc-star-pick {
+  position: absolute; top: 12px; right: 12px; width: 32px; height: 32px;
+  background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
+  border: 1px solid var(--border); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 14px;
+  cursor: pointer; transition: all .2s; z-index: 2;
+}
+.pc-star-pick:hover { background: var(--gold-bg); border-color: rgba(196,154,32,0.3); }
+.pc-star-pick.picked { background: var(--gold); border-color: var(--gold); }
+.pc-star-pick.picked::after { content: '⭐'; }
+.pc-star-pick:not(.picked)::after { content: '☆'; }
+.pc-body { padding: 20px; }
+.pc-vendor-name { font-size: 11px; color: var(--teal); margin-bottom: 4px; }
+.pc-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; line-height: 1.4; color: var(--text); }
+.pc-category { font-size: 11px; color: var(--text-muted); margin-bottom: 12px; }
+.pc-pricing { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.pc-dimenz { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: var(--gold); }
+.pc-eur { font-size: 13px; color: var(--text-dim); }
+.pc-actions { display: flex; gap: 8px; }
+.pc-btn {
+  flex: 1; padding: 10px; border-radius: 8px; font-size: 12px; font-weight: 600;
+  border: none; cursor: pointer; transition: all .2s; font-family: 'Inter', sans-serif;
+}
+.pc-btn-redeem { background: var(--gold-bg); color: var(--gold-dark); border: 1px solid rgba(196,154,32,0.2); }
+.pc-btn-redeem:hover { background: rgba(196,154,32,0.15); }
+.pc-btn-buy { background: var(--accent-light); color: var(--accent); border: 1px solid rgba(108,92,231,0.15); }
+.pc-btn-buy:hover { background: rgba(108,92,231,0.12); }
+
+/* ═══════════════════════════════════
+   PAGINATION
+   ═══════════════════════════════════ */
+.pagination {
+  display: flex; align-items: center; justify-content: center; gap: 4px;
+  margin-top: 40px;
+}
+.page-btn {
+  width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border);
+  background: var(--bg-card); display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s;
+  color: var(--text-dim); text-decoration: none;
+}
+.page-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.page-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.page-btn.disabled { opacity: 0.4; cursor: default; }
+
+/* ═══════════════════════════════════
+   FLOATING ACTION BAR (shared)
+   ═══════════════════════════════════ */
+.fab {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 300;
+  display: flex; align-items: center; gap: 4px;
+  background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(24px);
+  border: 1px solid var(--border); border-radius: 100px;
+  padding: 8px 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+.fab-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 16px; border-radius: 16px; cursor: pointer; transition: all .2s;
+  position: relative;
+}
+.fab-item:hover { background: rgba(0,0,0,0.04); }
+.fab-icon { font-size: 20px; }
+.fab-label { font-size: 9px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.5px; }
+.fab-item.active .fab-label { color: var(--gold); }
+.fab-badge {
+  position: absolute; top: 2px; right: 8px; width: 16px; height: 16px;
+  background: var(--red); border-radius: 50%; font-size: 9px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; color: #fff;
+}
+.fab-divider { width: 1px; height: 32px; background: var(--border); margin: 0 4px; }
+.fab-timer {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 8px 20px; border-radius: 16px;
+  background: var(--accent-light); border: 1px solid rgba(108,92,231,0.1);
+  cursor: pointer;
+}
+.fab-timer-val { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--accent); }
+.fab-timer-label { font-size: 8px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.8px; }
+
+/* ═══════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════ */
+@media (max-width: 1024px) {
+  .explore-layout { grid-template-columns: 200px 1fr; gap: 24px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .top-nav { padding: 0 16px; }
+  .tn-links { display: none; }
+  .wallet-pill { display: none; }
+  .explore-layout { grid-template-columns: 1fr; padding: 0 16px; }
+  .sidebar { position: static; }
+  .page-header { padding: 80px 16px 24px; }
+  .search-bar { padding: 0 16px; }
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .fab { padding: 6px 8px; gap: 0; }
+  .fab-item { padding: 6px 10px; }
+  .fab-label { font-size: 8px; }
+}
+@media (max-width: 480px) {
+  .product-grid { grid-template-columns: 1fr; }
+}
+
+/* Scroll Reveal */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .5s ease, transform .5s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- SWITCH BAR -->
+<div class="switch-bar">
+  <a href="index.html">Shop Home</a>
+  <a href="explore.html" class="active-page">Explore</a>
+  <a href="product.html">Product Page</a>
+  <span>·</span>
+  <a href="project-roadmap.html">Technical Roadmap →</a>
+</div>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <div class="top-nav-left">
+    <a href="index.html" class="tn-logo">PRIZINO</a>
+    <div class="tn-links">
+      <a href="#">Games</a>
+      <a href="index.html" class="active">Treasury</a>
+      <a href="#">The Mint</a>
+      <a href="#">Winners</a>
+      <a href="#">Rewards</a>
+    </div>
+  </div>
+  <div class="top-nav-right">
+    <div class="wallet-pill">
+      <span class="wp-tz">TZ 4,280</span>
+      <span class="wp-sep"></span>
+      <span class="wp-dz">DZ 1,650</span>
+      <span class="wp-sep"></span>
+      <span class="wp-pr">PR 12</span>
+    </div>
+    <div class="user-avatar">M</div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <h1>Explore Prizes</h1>
+  <p>Browse, filter, and find the perfect prize to redeem or buy. 48 items across 6 categories.</p>
+</div>
+
+<!-- SEARCH -->
+<div class="search-bar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="Search prizes… e.g. PS5, headphones, yoga mat">
+    <span class="search-count">48 prizes</span>
+  </div>
+</div>
+
+<!-- EXPLORE LAYOUT -->
+<div class="explore-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Categories</div>
+      <ul class="sidebar-list">
+        <li class="active">All Prizes <span class="count">48</span></li>
+        <li>🎮 Tech & Toys <span class="count">14</span></li>
+        <li>🏡 In & Outdoors <span class="count">9</span></li>
+        <li>💎 Style & Flex <span class="count">8</span></li>
+        <li>🧘 Mind & Body <span class="count">7</span></li>
+        <li>🔥 Pop & Culture <span class="count">6</span></li>
+        <li>🎁 Collectionz <span class="count">4</span></li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Price Range (Dimenz)</div>
+      <div class="sidebar-range">
+        <input type="range" min="0" max="5000" value="5000">
+        <div class="range-labels">
+          <span>0 DZ</span>
+          <span>5,000 DZ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Vendor</div>
+      <div class="sidebar-chips">
+        <span class="sidebar-chip active">All</span>
+        <span class="sidebar-chip">Sony</span>
+        <span class="sidebar-chip">Canon</span>
+        <span class="sidebar-chip">Apple</span>
+        <span class="sidebar-chip">Nintendo</span>
+        <span class="sidebar-chip">Peak Design</span>
+        <span class="sidebar-chip">FitGear</span>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-title">Status</div>
+      <div class="sidebar-chips">
+        <span class="sidebar-chip">New</span>
+        <span class="sidebar-chip">Limited</span>
+        <span class="sidebar-chip">Free Delivery</span>
+        <span class="sidebar-chip">Leaving Soon</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN GRID -->
+  <main>
+    <div class="grid-toolbar">
+      <div class="grid-toolbar-left">Showing <strong>48</strong> prizes</div>
+      <div class="grid-toolbar-right">
+        <select class="sort-select">
+          <option>Sort: Newest</option>
+          <option>Price: Low → High</option>
+          <option>Price: High → Low</option>
+          <option>Most Popular</option>
+          <option>Leaving Soon</option>
+        </select>
+        <div class="view-toggle">
+          <div class="view-btn active" title="Grid">⊞</div>
+          <div class="view-btn" title="List">☰</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product-grid reveal">
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          🎮
+          <div class="pc-badges">
+            <span class="pc-badge pcb-free">Free Delivery</span>
+            <span class="pc-badge pcb-new">New</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Sony Official</div>
+          <div class="pc-title">PlayStation 5 Pro Console</div>
+          <div class="pc-category">Tech & Toys</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 3,200</span>
+            <span class="pc-eur">€349.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€349</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          📸
+          <div class="pc-badges">
+            <span class="pc-badge pcb-limited">Limited</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Canon Store</div>
+          <div class="pc-title">Canon EOS R50 Mirrorless Camera</div>
+          <div class="pc-category">Tech & Toys</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 2,800</span>
+            <span class="pc-eur">€699.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€699</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          🎧
+          <div class="pc-badges">
+            <span class="pc-badge pcb-free">Free Delivery</span>
+          </div>
+          <div class="pc-star-pick picked" title="Your Star Pick!"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Sony Official</div>
+          <div class="pc-title">Sony WH-1000XM5 Headphones</div>
+          <div class="pc-category">Tech & Toys</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 1,500</span>
+            <span class="pc-eur">€349.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€349</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          ⌚
+          <div class="pc-badges">
+            <span class="pc-badge pcb-vendor">Vendor</span>
+            <span class="pc-badge pcb-new">New</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Apple Reseller IE</div>
+          <div class="pc-title">Apple Watch Ultra 2</div>
+          <div class="pc-category">Style & Flex</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 3,600</span>
+            <span class="pc-eur">€799.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€799</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          🧘
+          <div class="pc-badges">
+            <span class="pc-badge pcb-free">Free Delivery</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Wellness Vendor</div>
+          <div class="pc-title">Theragun Elite Massage Gun</div>
+          <div class="pc-category">Mind & Body</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 1,800</span>
+            <span class="pc-eur">€399.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€399</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          🎒
+          <div class="pc-badges">
+            <span class="pc-badge pcb-limited">Limited</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Peak Design</div>
+          <div class="pc-title">Peak Design Everyday Backpack</div>
+          <div class="pc-category">Style & Flex</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 1,200</span>
+            <span class="pc-eur">€289.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€289</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          🕹️
+          <div class="pc-badges">
+            <span class="pc-badge pcb-new">New</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Nintendo Store</div>
+          <div class="pc-title">Nintendo Switch 2</div>
+          <div class="pc-category">Tech & Toys</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 2,200</span>
+            <span class="pc-eur">€449.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€449</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          🏋️
+          <div class="pc-badges">
+            <span class="pc-badge pcb-free">Free Delivery</span>
+            <span class="pc-badge pcb-vendor">Vendor</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">FitGear IE</div>
+          <div class="pc-title">Adjustable Dumbbell Set 40kg</div>
+          <div class="pc-category">In & Outdoors</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 900</span>
+            <span class="pc-eur">€199.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€199</button>
+          </div>
+        </div>
+      </a>
+
+      <a class="product-card" href="product.html">
+        <div class="pc-img">
+          🎯
+          <div class="pc-badges">
+            <span class="pc-badge pcb-new">New</span>
+          </div>
+          <div class="pc-star-pick" title="Set as Star Pick"></div>
+        </div>
+        <div class="pc-body">
+          <div class="pc-vendor-name">Prizino Picks</div>
+          <div class="pc-title">Dart Board Pro Tournament Set</div>
+          <div class="pc-category">In & Outdoors</div>
+          <div class="pc-pricing">
+            <span class="pc-dimenz">DZ 450</span>
+            <span class="pc-eur">€89.00</span>
+          </div>
+          <div class="pc-actions">
+            <button class="pc-btn pc-btn-redeem">Redeem</button>
+            <button class="pc-btn pc-btn-buy">€89</button>
+          </div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+      <a class="page-btn disabled">←</a>
+      <a class="page-btn active">1</a>
+      <a class="page-btn">2</a>
+      <a class="page-btn">3</a>
+      <a class="page-btn">4</a>
+      <a class="page-btn">→</a>
+    </div>
+
+  </main>
+</div>
+
+<!-- FLOATING ACTION BAR -->
+<div class="fab">
+  <div class="fab-item">
+    <span class="fab-icon">☰</span>
+    <span class="fab-label">MENU</span>
+  </div>
+  <div class="fab-item">
+    <span class="fab-icon">⭐</span>
+    <span class="fab-label">STAR PICK</span>
+  </div>
+  <div class="fab-item" onclick="window.location.href='index.html'">
+    <span class="fab-icon">🎮</span>
+    <span class="fab-label">PLAY</span>
+  </div>
+  <div class="fab-divider"></div>
+  <div class="fab-item">
+    <span class="fab-icon">ℹ️</span>
+    <span class="fab-label">INFO</span>
+  </div>
+  <div class="fab-item">
+    <span class="fab-icon">🛒</span>
+    <span class="fab-label">BAG</span>
+    <span class="fab-badge">2</span>
+  </div>
+  <div class="fab-divider"></div>
+  <div class="fab-timer">
+    <span class="fab-timer-val" id="fabCountdown">4d 12:37:52</span>
+    <span class="fab-timer-label">Next Draw</span>
+  </div>
+</div>
+
+<script>
+/* ─── COUNTDOWN TIMER ─── */
+function updateCountdown() {
+  const now = new Date();
+  const nextSunday = new Date(now);
+  nextSunday.setDate(now.getDate() + (7 - now.getDay()));
+  nextSunday.setHours(20, 0, 0, 0);
+  if (now > nextSunday) nextSunday.setDate(nextSunday.getDate() + 7);
+  const diff = nextSunday - now;
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('fabCountdown').textContent =
+    `${d}d ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+
+/* ─── SCROLL REVEAL ─── */
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+  });
+}, { threshold: 0.08 });
+reveals.forEach(el => observer.observe(el));
+
+/* ─── SIDEBAR FILTERS ─── */
+document.querySelectorAll('.sidebar-list li').forEach(li => {
+  li.addEventListener('click', function() {
+    this.parentElement.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+document.querySelectorAll('.sidebar-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    this.classList.toggle('active');
+  });
+});
+
+/* ─── VIEW TOGGLE ─── */
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ─── STAR PICK ─── */
+document.querySelectorAll('.pc-star-pick').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    e.preventDefault(); e.stopPropagation();
+    document.querySelectorAll('.pc-star-pick').forEach(b => b.classList.remove('picked'));
+    this.classList.add('picked');
+  });
+});
+</script>
+</body>
+</html>
