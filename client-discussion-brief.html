@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prizino Client Discussion Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0b0f14;
+  --bg-soft: #111827;
+  --card: #151f2e;
+  --card-alt: #1a2638;
+  --text: #e6edf7;
+  --text-dim: #95a5bd;
+  --accent: #22c55e;
+  --accent-2: #38bdf8;
+  --gold: #fbbf24;
+  --warn: #f97316;
+  --border: rgba(255,255,255,0.08);
+  --radius: 16px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  line-height: 1.7;
+  background:
+    radial-gradient(1000px 500px at 0% 0%, rgba(56, 189, 248, 0.12), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(34, 197, 94, 0.1), transparent 50%),
+    linear-gradient(180deg, var(--bg), var(--bg-soft));
+  min-height: 100vh;
+}
+
+.wrapper {
+  width: min(1100px, 100% - 40px);
+  margin: 32px auto 80px;
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(56,189,248,0.14), rgba(34,197,94,0.08));
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 36px;
+  margin-bottom: 24px;
+}
+
+.kicker {
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: var(--text-dim);
+  max-width: 850px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.card {
+  grid-column: span 12;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+
+.card h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.card p,
+.card li { color: var(--text-dim); }
+
+.card strong { color: var(--text); font-weight: 600; }
+
+ol, ul { padding-left: 20px; }
+li + li { margin-top: 8px; }
+
+.cols-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.pill {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  background: var(--card-alt);
+  color: var(--text);
+}
+
+.ok { color: var(--accent); font-weight: 600; }
+.warn { color: var(--warn); font-weight: 600; }
+.gold { color: var(--gold); font-weight: 600; }
+
+.quote {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 3px solid var(--accent-2);
+  background: rgba(56, 189, 248, 0.08);
+  color: var(--text);
+}
+
+.footer-note {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  .cols-2 { grid-template-columns: 1fr; }
+  .wrapper { width: min(1100px, 100% - 24px); margin-top: 20px; }
+  .hero { padding: 24px; }
+}
+</style>
+</head>
+<body>
+  <main class="wrapper">
+    <section class="hero">
+      <span class="kicker">Client Strategy Summary</span>
+      <h1>Prizino Discussion Brief</h1>
+      <p>This is the dedicated, cleaned version of the strategy discussion so you can review client intent, feasibility, workflow, and delivery positioning in one place.</p>
+      <div class="pill-row">
+        <span class="pill">Oxygen-first build</span>
+        <span class="pill">WooCommerce-native product flow</span>
+        <span class="pill">Plugin-first integration</span>
+        <span class="pill">Phased delivery</span>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>What The Client Is Asking</h2>
+        <ol>
+          <li>Build in WordPress using Oxygen Builder where possible.</li>
+          <li>Work with existing installed plugins and integrate them cleanly.</li>
+          <li>Implement Treasury calculations after they send conversion rules (Dz/Tz/PR/EUR).</li>
+          <li>Keep product management in normal WooCommerce admin flow.</li>
+          <li>Start with 3 core pages first: Shop Home, Explore, Single Product.</li>
+          <li>Give realistic timeline because Mint page may be developed in parallel by another dev.</li>
+          <li>Support display-only prizes that are not purchasable and link to games.</li>
+          <li>Prepare architecture for next phase: Mint page + Account + game-style product cards.</li>
+        </ol>
+      </article>
+
+      <article class="card">
+        <h2>Is It Possible?</h2>
+        <p><span class="ok">Yes, fully possible.</span> Best estimate is roughly <strong>85-90% plugin + Oxygen configuration</strong> and <strong>10-15% custom code</strong> for unique logic and integration glue.</p>
+        <ul>
+          <li><strong>Custom code likely needed for:</strong> Treasury conversions edge cases, display-only prize behavior, game action buttons, and cross-plugin sync safeguards.</li>
+          <li><strong>Good news:</strong> WooCommerce-native product creation can remain intact while front-end behavior is customized.</li>
+        </ul>
+      </article>
+
+      <div class="cols-2 card" style="padding: 16px; background: transparent; border: none;">
+        <article class="card" style="margin: 0;">
+          <h2>What You Should Promise</h2>
+          <ol>
+            <li>Oxygen-based reusable templates and component system.</li>
+            <li>WooCommerce-native product operations remain standard.</li>
+            <li>Plugin-first implementation, custom code only where required.</li>
+            <li>Architecture that can expand into Mint and Account phases.</li>
+            <li>Staged delivery so parallel development is safe.</li>
+          </ol>
+        </article>
+
+        <article class="card" style="margin: 0;">
+          <h2>Critical Clarifications Before Final Quote</h2>
+          <ol>
+            <li>Exact plugin list + versions (BuyCred/MyCred/MarketKing/CheckoutWP).</li>
+            <li>PR earning events (purchase, referral, login, game actions).</li>
+            <li>Conversion formulas and rounding rules.</li>
+            <li>Display-only prize behavior and visibility rules.</li>
+            <li>Vendor permission matrix.</li>
+            <li>Staging access, backups, and rollback expectations.</li>
+          </ol>
+        </article>
+      </div>
+
+      <article class="card">
+        <h2>Recommended Workflow (Your Side)</h2>
+        <ol>
+          <li>Discovery + technical audit of current stack.</li>
+          <li>Confirm plugin responsibilities and conflict risks.</li>
+          <li>Define data model for Tz, Dz, PR, and conversion math.</li>
+          <li>Build Oxygen design system (buttons, cards, FAQ, utility sections).</li>
+          <li>Build 3 core pages (Shop Home, Explore, Single Product).</li>
+          <li>Implement behavior tiers (buyable, redeemable, display-only linked prizes).</li>
+          <li>Integrate checkout redemption + points visibility.</li>
+          <li>QA (mobile/desktop + plugin interactions + edge-case flows).</li>
+          <li>Handoff docs + reusable component map for next pages.</li>
+        </ol>
+      </article>
+
+      <article class="card">
+        <h2>Practical Time Split</h2>
+        <ul>
+          <li><strong>Week 1:</strong> audit, architecture, design system, Shop Home.</li>
+          <li><strong>Week 2:</strong> Explore, Single Product, display-only prize behavior.</li>
+          <li><strong>Week 3:</strong> conversion logic polish, full testing, bug fixes, deployment support.</li>
+        </ul>
+        <p style="margin-top: 8px;"><span class="gold">MVP for 3 pages:</span> usually 7-10 working days if inputs are ready, plus 3-5 days for stabilization.</p>
+      </article>
+
+      <article class="card">
+        <h2>Client Message You Can Send</h2>
+        <div class="quote">
+          Yes, we can build this in WordPress using Oxygen as the primary builder while keeping WooCommerce product management standard from admin.
+          <br><br>
+          We will use your existing plugin stack first, then add custom code only where your Treasury system needs unique logic (display-only prizes, game-link actions, conversion rules).
+          <br><br>
+          For phase 1, we can deliver the 3 core pages first (Shop Home, Explore, Single Product) using reusable components so the same design system can extend to Mint and Account later.
+          <br><br>
+          Once you share the Dz/Tz/PR calculation doc, I will map it into a clean implementation plan.
+          <br><br>
+          Estimated timeline: MVP in 7-10 working days, then 3-5 days for integration testing and polish, depending on final rules and plugin interactions.
+        </div>
+      </article>
+    </section>
+
+    <p class="footer-note">Dedicated file for client discussion strategy • Prepared for quick decision making</p>
+  </main>
+</body>
+</html>
